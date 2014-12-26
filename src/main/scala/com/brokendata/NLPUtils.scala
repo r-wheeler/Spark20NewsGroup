@@ -1,5 +1,6 @@
 package com.brokendata
 
+import com.brokendata.Utils._
 import java.util.Properties
 
 import edu.stanford.nlp.ling.CoreAnnotations.{LemmaAnnotation, TokensAnnotation, SentencesAnnotation}
@@ -7,6 +8,7 @@ import edu.stanford.nlp.pipeline.{Annotation, StanfordCoreNLP}
 
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.JavaConversions._
+
 
 
 object NLPUtils {
@@ -48,7 +50,13 @@ object NLPUtils {
     true
   }
 
+  def createLabedDocument(path: String, body: String, stopWords:Set[String]): LabledDocument = {
+    val (label, id) = getLabelandId(path)
+    val processedDoc = tokenizeAndStem(body, stopWords)
+    LabledDocument(id, processedDoc, label)
 
-
+  }
 
 }
+
+case class LabledDocument(id: String, body: Seq[String], label: String)
