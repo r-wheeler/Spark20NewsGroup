@@ -23,25 +23,27 @@ object NewsGroup {
     val sc = new SparkContext("local[5]", "List Combine")
 
     /**
-     *  Stopwords are broadcast to all RDD's across the cluster
+     * Stopwords are broadcast to all RDD's across the cluster
      *
      */
 
-    val stopWords = sc.broadcast(loadStopWords("stopwords.txt")).value
+    //    val stopWords = sc.broadcast(loadStopWords("resources/stopwords.txt")).value
+
+    // this is failing to load stopwords, use this http://stackoverflow.com/questions/5285898/how-to-access-test-resources
+
+
 
     /**
      * Training dataset is load via wholeTextFiles which returns an array of tuples
      * in the form of (pathToDocument, Text) without parsing the text like sc.textFiles
      */
 
-    val training = sc.wholeTextFiles("data/training/*")
+    /*val training = sc.wholeTextFiles("data/training/*")
       .map(rawText => LabledDocument())
+       */
 
-
-
-
-
-
+      */
   }
 
 }
+
