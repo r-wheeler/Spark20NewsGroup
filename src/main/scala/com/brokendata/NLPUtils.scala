@@ -36,7 +36,9 @@ object NLPUtils {
     lemmas
   }
 
-  def loadStopWords(path: String) = scala.io.Source.fromFile(path).getLines().toSet
+  def loadStopWords(path: String): Set[String] =
+    scala.io.Source.fromURL(getClass.getResource(path))
+    .getLines().toSet
 
   def isOnlyLetters(str: String): Boolean = {
     // While loop for high performance
@@ -50,9 +52,16 @@ object NLPUtils {
     true
   }
 
-  def createLabedDocument(path: String, body: String, stopWords:Set[String]): LabledDocument = {
-    val (label, id) = getLabelandId(path)
-    val processedDoc = tokenizeAndStem(body, stopWords)
+  def createLabledDocument(wholeTextFile: (String,String), stopWords:Set[String]): LabledDocument = {
+    /*
+     Parse the wholeTextFile and return a LabledDocument
+      wholeTextFile._1 is the path, this is parsed for the label and doc ID
+      wholeTextFile._2 is the text, this is tokenized and stemmed
+
+     */
+
+    val (label, id) = getLabelandId(wholeTextFile._1)
+    val processedDoc = tokenizeAndStem(wholeTextFile._2, stopWords)
     LabledDocument(id, processedDoc, label)
 
   }

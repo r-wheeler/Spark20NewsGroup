@@ -20,16 +20,14 @@ object NewsGroup {
 
     */
     val conf = new SparkConf().setAppName("SimpleTextClassificationPipeline")
-    val sc = new SparkContext("local[5]", "List Combine")
+    val sc = new SparkContext("local[2]", "List Combine")
 
     /**
      * Stopwords are broadcast to all RDD's across the cluster
      *
      */
 
-    //    val stopWords = sc.broadcast(loadStopWords("resources/stopwords.txt")).value
-
-    // this is failing to load stopwords, use this http://stackoverflow.com/questions/5285898/how-to-access-test-resources
+     val stopWords = sc.broadcast(loadStopWords("/stopwords.txt")).value
 
 
 
