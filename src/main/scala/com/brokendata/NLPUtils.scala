@@ -53,11 +53,10 @@ object NLPUtils {
   }
 
   def createLabledDocument(wholeTextFile: (String,String), stopWords:Set[String]): LabledDocument = {
-    /*
-     Parse the wholeTextFile and return a LabledDocument
-      wholeTextFile._1 is the path, this is parsed for the label and doc ID
-      wholeTextFile._2 is the text, this is tokenized and stemmed
-
+    /**
+     * Parse the wholeTextFile and return a LabledDocument
+     * wholeTextFile._1 is the path, this is parsed for the label and doc ID
+     * wholeTextFile._2 is the text, this is tokenized and stemmed
      */
 
     val (label, id) = getLabelandId(wholeTextFile._1)
