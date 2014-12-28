@@ -6,9 +6,6 @@ import com.brokendata.LabeledDocument
 import org.apache.spark.mllib.classification.NaiveBayes
 
 import org.apache.spark.{SparkContext, SparkConf}
-import org.apache.spark.SparkContext._
-import org.apache.spark.mllib.linalg._
-import org.apache.spark.mllib.linalg.distributed.RowMatrix
 import org.apache.spark.mllib.feature.{HashingTF, IDF, Normalizer}
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
@@ -22,6 +19,7 @@ object NewsGroup {
       .setMaster("local[*]")
       .setAppName("SimpleTextClassificationPipeline")
       .set("spark.executor.memory","2g")
+      .set("spark.driver.memory", "3g")
     //val sc = new SparkContext("local[*]", "List Combine")
     val sc = new SparkContext(conf)
 
@@ -42,30 +40,6 @@ object NewsGroup {
 
   }
 
-  def tfidfTransformer(data: RDD[LabeledDocument],
-                       lableMap: Map[String,Int],
-                       norm: Boolean = false): RDD[LabeledPoint] = {
-    /**
-     * Implements TFIDF via Sparks built in methods. Because idfModel requires and RDD[Vector] we are not able to pass directly in
-     * a RDD[LabeledPoint]. A work around is to save the LabeledPoint.features to a var (hashedData), transform the data, then  zip
-     * the labeled dataset and the transformed IDFs and project them to a new LabeledPoint
-
-      Data: RDD of type LabledDocument
-      LabelMap: a hashmap containing text labels to numeric labels ("alt.atheism" -> 4)
-     */
-    val tf = new HashingTF()
-    val freqs = data.map(x => (LabeledPoint(lableMap(x.label), tf.transform(x.body)))).cache()
-    val hashedData = freqs.map(_.features)
-    val idfModel = new IDF().fit(hashedData)
-    val idf = idfModel.transform(hashedData)
-    val LabeledVectors = if (norm == true) {
-      val l2 = new Normalizer()
-      idf.zip(freqs).map(x => LabeledPoint(x._2.label, l2.transform(x._1)))
-    } else {
-      idf.zip(freqs).map(x => LabeledPoint(x._2.label, x._1))
-    }
-    LabeledVectors
-  }
 
 }
 
