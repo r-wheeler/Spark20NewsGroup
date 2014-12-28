@@ -52,7 +52,7 @@ object NLPUtils {
     true
   }
 
-  def createLabledDocument(wholeTextFile: (String,String), stopWords:Set[String]): LabledDocument = {
+  def createLabeledDocument(wholeTextFile: (String,String), stopWords:Set[String]): LabeledDocument = {
     /**
      * Parse the wholeTextFile and return a LabledDocument
      * wholeTextFile._1 is the path, this is parsed for the label and doc ID
@@ -61,10 +61,10 @@ object NLPUtils {
 
     val (label, id) = getLabelandId(wholeTextFile._1)
     val processedDoc = tokenizeAndStem(wholeTextFile._2, stopWords)
-    LabledDocument(id, processedDoc, label)
+    LabeledDocument(id, processedDoc, label)
 
   }
 
 }
 
-case class LabledDocument(id: String, body: Seq[String], label: String)
+case class LabeledDocument(id: String, body: Seq[String], label: String)
