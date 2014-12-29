@@ -18,7 +18,6 @@ object NewsGroup {
     val conf = new SparkConf()
       .setMaster("local[*]")
       .setAppName("SimpleTextClassificationPipeline")
-      .set("spark.executor.memory","2g")
       .set("spark.driver.memory", "3g")
     //val sc = new SparkContext("local[*]", "List Combine")
     val sc = new SparkContext(conf)
