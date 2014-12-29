@@ -28,7 +28,7 @@ object NewsGroup {
 
     // tokenize, stem, etc
     val training = sc.wholeTextFiles("data/training/*").map(rawText => createLabeledDocument(rawText, stopWords))
-    val test = sc.wholeTextFiles("data/training/*").map(rawText => createLabeledDocument(rawText, stopWords))
+    val test = sc.wholeTextFiles("data/test/*").map(rawText => createLabeledDocument(rawText, stopWords))
 
     //create feature Vectors
     val forumIndexMap = convertLabelToNumeric("data/training/") // map containing labels to numeric values for labeled Naive Bayes. "alt.atheism" -> 4
