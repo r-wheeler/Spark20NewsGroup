@@ -27,8 +27,11 @@ object NaiveBayesSpark {
     val labelToNumeric = createLabelMap("data/training/")
 
     // tokenize, stem, etc
-    val training = sc.wholeTextFiles("data/training/*").map(rawText => createLabeledDocument(rawText, labelToNumeric, stopWords))
-    val test = sc.wholeTextFiles("data/test/*").map(rawText => createLabeledDocument(rawText,labelToNumeric, stopWords))
+
+    val training = sc.wholeTextFiles("data/training/*")
+      .map(rawText => createLabeledDocument(rawText, labelToNumeric, stopWords))
+    val test = sc.wholeTextFiles("data/test/*")
+      .map(rawText => createLabeledDocument(rawText,labelToNumeric, stopWords))
 
     //create features
     val X_train = tfidfTransformer(training)
