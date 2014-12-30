@@ -1,12 +1,14 @@
 package com.brokendata
 
 import java.io.File
+import scala.annotation
 
 
 object Utils {
   //-------------------------------------------------------------------------------------------------------------
   //File Utils
   //-------------------------------------------------------------------------------------------------------------
+
 
   def getFileTree(f: File): Stream[File] =
     f #:: (if (f.isDirectory) f.listFiles().toStream.flatMap(getFileTree)
@@ -22,7 +24,7 @@ object Utils {
     getFileTree(f) map (x => (x.getParentFile.getName))
   }
 
-  def convertLabelToNumeric(path: String): Map[String, Int] = {
+  def createLabelMap(path: String): Map[String, Int] = {
     val x = getParent(path).toList.distinct
     (x zip x.indices).toMap
   }

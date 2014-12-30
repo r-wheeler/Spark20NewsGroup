@@ -55,7 +55,7 @@ object NLPUtils {
     true
   }
 
-  def createLabeledDocument(wholeTextFile: (String,String), stopWords:Set[String]): LabeledDocument = {
+  def createLabeledDocument(wholeTextFile: (String,String), labelMap: Map[String,Int], stopWords:Set[String]): LabeledDocument = {
     /**
      * Parse the wholeTextFile and return a LabledDocument
      * wholeTextFile._1 is the path, this is parsed for the label and doc ID
@@ -64,12 +64,10 @@ object NLPUtils {
 
     val (label, id) = getLabelandId(wholeTextFile._1)
     val processedDoc = tokenizeAndStem(wholeTextFile._2, stopWords)
-    LabeledDocument(id, processedDoc, label)
+    LabeledDocument(id, processedDoc, label, labelMap(label))
   }
 
-  def tfidfTransformer(data: RDD[LabeledDocument],
-                       lableMap: Map[String,Int],
-                       norm: Boolean = false): RDD[LabeledPoint] = {
+  def tfidfTransformer(data: RDD[LabeledDocument],norm: Boolean = false): RDD[LabeledPoint] = {
     /**
      * Implements TFIDF via Sparks built in methods. Because idfModel requires and RDD[Vector] we are not able to pass directly in
      * a RDD[LabeledPoint]. A work around is to save the LabeledPoint.features to a var (hashedData), transform the data, then  zip
@@ -79,7 +77,7 @@ object NLPUtils {
       LabelMap: a hashmap containing text labels to numeric labels ("alt.atheism" -> 4)
      */
     val tf = new HashingTF()
-    val freqs = data.map(x => (LabeledPoint(lableMap(x.label), tf.transform(x.body)))).cache()
+    val freqs = data.map(x => (LabeledPoint(x.numericLabel, tf.transform(x.body)))).cache()
     val hashedData = freqs.map(_.features)
     val idfModel = new IDF().fit(hashedData)
     val idf = idfModel.transform(hashedData)
@@ -94,4 +92,4 @@ object NLPUtils {
 
 }
 
-case class LabeledDocument(id: String, body: Seq[String], label: String)
+case class LabeledDocument(id: String, body: Seq[String], label: String, numericLabel: Int)
