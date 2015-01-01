@@ -26,8 +26,7 @@ object NaiveBayesSpark {
     // map containing labels to numeric values for labeled Naive Bayes. "alt.atheism" -> 4
     val labelToNumeric = createLabelMap("data/training/")
 
-    // tokenize, stem, etc
-
+    // tokenize, stem,
     val training = sc.wholeTextFiles("data/training/*")
       .map(rawText => createLabeledDocument(rawText, labelToNumeric, stopWords))
     val test = sc.wholeTextFiles("data/test/*")
@@ -41,6 +40,9 @@ object NaiveBayesSpark {
     val model = NaiveBayes.train(X_train,lambda = 1.0)
     val predictionAndLabel = X_test.map(x => (model.predict(x.features), x.label))
     val accuracy = 1.0 *  predictionAndLabel.filter(x => x._1 == x._2).count() / X_test.count()
+
+    println("*************Accuracy Report:***********************")
+    println(accuracy)
 
   }
 

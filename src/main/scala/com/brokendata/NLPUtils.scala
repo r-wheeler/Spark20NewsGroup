@@ -55,7 +55,8 @@ object NLPUtils {
     true
   }
 
-  def createLabeledDocument(wholeTextFile: (String,String), labelMap: Map[String,Int], stopWords:Set[String]): LabeledDocument = {
+  def createLabeledDocument(wholeTextFile: (String,String), labelMap: Map[String,Int]
+                            , stopWords:Set[String]): LabeledDocument = {
     /**
      * Parse the wholeTextFile and return a LabledDocument
      * wholeTextFile._1 is the path, this is parsed for the label and doc ID
