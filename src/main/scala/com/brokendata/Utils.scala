@@ -5,10 +5,6 @@ import scala.annotation
 
 
 object Utils {
-  //-------------------------------------------------------------------------------------------------------------
-  //File Utils
-  //-------------------------------------------------------------------------------------------------------------
-
 
   def getFileTree(f: File): Stream[File] =
     f #:: (if (f.isDirectory) f.listFiles().toStream.flatMap(getFileTree)

@@ -34,9 +34,9 @@ object NaiveBayesSpark {
 
     //create features
     val X_train = tfidfTransformer(training)
-    val X_test = tfidfTransformer(training)
+    val X_test = tfidfTransformer(test)
 
-    //fix MultiNomial Naive Bayes
+    //Train / Predict
     val model = NaiveBayes.train(X_train,lambda = 1.0)
     val predictionAndLabel = X_test.map(x => (model.predict(x.features), x.label))
     val accuracy = 1.0 *  predictionAndLabel.filter(x => x._1 == x._2).count() / X_test.count()
